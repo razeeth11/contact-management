@@ -1,35 +1,113 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import "./App.css";
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import EditIcon from '@mui/icons-material/Edit';
+import Button from '@mui/material/Button';
+import DeleteIcon from '@mui/icons-material/Delete';
 
-function App() {
-  const [count, setCount] = useState(0)
+export function App() {
+  return (
+    <div className="App">
+      <Container />
+    </div>
+  );
+}
+
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`vertical-tabpanel-${index}`}
+      aria-labelledby={`vertical-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+
+function Container(){
+  const [value, setValue] = useState(0);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  return(
+    <div className="container">
+       <Box
+      sx={{ bgcolor: 'lightGrey', display: 'flex' , minHeight : '150px' , width : "500px"}}
+    >
+      <Tabs
+        orientation="vertical"
+        variant="scrollable"
+        value={value}
+        onChange={handleChange}
+        aria-label="Vertical tabs example"
+        sx={{ borderRight: 1, borderColor: 'divider' }}
+      >
+        <Tab label="CONTACTS" />
+        <Tab label="CHARTS & MAPS" />
+      </Tabs>
+      <TabPanel value={value} index={0}>
+        <ContactList/>
+      </TabPanel>
+      <TabPanel value={value} index={1}>
+         charts
+      </TabPanel>
+    </Box>
+    </div>
   )
 }
 
-export default App
+
+
+function ContactList() {
+  const [contactlist, setContactList] = useState([
+    {
+      name: "abdul",
+      email: "razeeth011@gmail.com",
+    },
+  ]);
+
+  return (
+    <div className="contact-list">
+      {contactlist.map((contact,index) => (
+        <Contact key={index} name={contact.name} email={contact.email} />
+      ))}
+      <CreateContact/>
+    </div>
+  );
+}
+
+function CreateContact(){
+  return(
+    <div className="create-contact">
+      <button>dd</button>
+    </div>
+  )
+}
+
+function Contact({ name, email}) {
+  return (
+    <div className="contact">
+      <p>{name}</p>
+      <p>{email}</p>
+      <div className="edit-button">
+      <EditIcon/>
+      <DeleteIcon/>
+      </div>
+    </div>
+  );
+}
